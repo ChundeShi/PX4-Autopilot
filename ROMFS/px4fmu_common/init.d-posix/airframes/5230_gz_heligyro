@@ -1,0 +1,149 @@
+#!/bin/sh
+#
+# @name Heligyro (NN Control Ready)
+# @type MC
+#
+# ============================================================================
+# HELIGYRO - Neural Network Offboard Control
+# ============================================================================
+# Architecture: NN on AIBook / mc_nn_control provides attitude control.
+# PX4 provides navigation, estimation, failsafes, and position control.
+# Control allocator maps NN outputs (5 normalized values) to motors.
+# ============================================================================
+
+. ${R}etc/init.d/rc.mc_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=gz}
+PX4_GZ_WORLD=${PX4_GZ_WORLD:=default}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=heligyro}
+
+param set-default MAV_TYPE 196
+set SYS_AUTOSTART 5230
+
+# ---------------------------------------------------------------------------
+# SIMULATION SETTINGS
+# ---------------------------------------------------------------------------
+param set-default SIM_GZ_EN 1
+param set-default SIM_BAT_ENABLE 1
+param set-default SIM_BAT_DRAIN 600.0
+param set-default SENS_EN_ARSPDSIM 1
+
+# ---------------------------------------------------------------------------
+# OFFBOARD ACTUATOR SET CONFIGURATION (Direct Motor Control)
+# ---------------------------------------------------------------------------
+# Map each motor output to Offboard Actuator Set 1.
+# Functions 101-105 correspond to Offboard Actuator Set 1 channels 1-5.
+param set-default SIM_GZ_EC_FUNC1 101   # Rotor 0 (upward, non-reversible)
+param set-default SIM_GZ_EC_FUNC2 102   # Rotor 1 (lower-right-front, CCW, reversible)
+param set-default SIM_GZ_EC_FUNC3 103   # Rotor 2 (upper-left-front, CCW, reversible)
+param set-default SIM_GZ_EC_FUNC4 104   # Rotor 3 (lower-left-front, CW, reversible)
+param set-default SIM_GZ_EC_FUNC5 105   # Rotor 4 (upper-right-front, CW, reversible)
+
+# Motor output limits (matches SDF motor plugin)
+param set-default SIM_GZ_EC_MIN1 0.0
+param set-default SIM_GZ_EC_MAX1 438.0
+param set-default SIM_GZ_EC_MIN2 -1300.0
+param set-default SIM_GZ_EC_MAX2 1300.0
+param set-default SIM_GZ_EC_MIN3 -1300.0
+param set-default SIM_GZ_EC_MAX3 1300.0
+param set-default SIM_GZ_EC_MIN4 -1300.0
+param set-default SIM_GZ_EC_MAX4 1300.0
+param set-default SIM_GZ_EC_MIN5 -1300.0
+param set-default SIM_GZ_EC_MAX5 1300.0
+
+# ---------------------------------------------------------------------------
+# ENABLE DYNAMIC CONTROL ALLOCATION
+# ---------------------------------------------------------------------------
+param set-default SYS_CTRL_ALLOC 1
+param set-default CA_AIRFRAME 1
+param set-default CA_ROTOR_COUNT 5
+param set-default CA_SV_CS_COUNT 0
+
+# Rotor 0 (upward, non-reversible)
+param set-default CA_ROTOR0_PX 0.0
+param set-default CA_ROTOR0_PY 0.0
+param set-default CA_ROTOR0_PZ 0.6
+param set-default CA_ROTOR0_AX 0.0
+param set-default CA_ROTOR0_AY 0.0
+param set-default CA_ROTOR0_AZ -1.0
+param set-default CA_ROTOR0_CT 0.0300
+param set-default CA_ROTOR0_KM 0.07525
+
+# Rotor 1 (lower-right-front, CCW, reversible)
+param set-default CA_ROTOR1_PX 0.1
+param set-default CA_ROTOR1_PY -0.56
+param set-default CA_ROTOR1_PZ -0.3
+param set-default CA_ROTOR1_AX 1.0
+param set-default CA_ROTOR1_AY 0.0
+param set-default CA_ROTOR1_AZ 0.0
+param set-default CA_ROTOR1_CT 0.0015
+param set-default CA_ROTOR1_KM 0.06
+
+# Rotor 2 (upper-left-front, CCW, reversible)
+param set-default CA_ROTOR2_PX 0.1
+param set-default CA_ROTOR2_PY 0.56
+param set-default CA_ROTOR2_PZ 0.3
+param set-default CA_ROTOR2_AX 1.0
+param set-default CA_ROTOR2_AY 0.0
+param set-default CA_ROTOR2_AZ 0.0
+param set-default CA_ROTOR2_CT 0.0015
+param set-default CA_ROTOR2_KM 0.06
+
+# Rotor 3 (lower-left-front, CW, reversible)
+param set-default CA_ROTOR3_PX 0.1
+param set-default CA_ROTOR3_PY 0.56
+param set-default CA_ROTOR3_PZ -0.3
+param set-default CA_ROTOR3_AX 1.0
+param set-default CA_ROTOR3_AY 0.0
+param set-default CA_ROTOR3_AZ 0.0
+param set-default CA_ROTOR3_CT 0.0015
+param set-default CA_ROTOR3_KM -0.06
+
+# Rotor 4 (upper-right-front, CW, reversible)
+param set-default CA_ROTOR4_PX 0.1
+param set-default CA_ROTOR4_PY -0.56
+param set-default CA_ROTOR4_PZ 0.3
+param set-default CA_ROTOR4_AX 1.0
+param set-default CA_ROTOR4_AY 0.0
+param set-default CA_ROTOR4_AZ 0.0
+param set-default CA_ROTOR4_CT 0.0015
+param set-default CA_ROTOR4_KM -0.06
+
+# ---------------------------------------------------------------------------
+# ARMING & FAILSAFE (Keep PX4 safety net)
+# ---------------------------------------------------------------------------
+param set-default COM_RC_IN_MODE 4       # No RC required for SITL
+param set-default COM_OF_LOSS_T 30.0     # Extended Offboard timeout
+param set-default COM_RC_LOSS_T 10.0
+param set-default FD_ACT_EN 0            # Disable actuator failure detection
+
+# Disable arming checks for SITL
+param set-default COM_ARM_EKF_POS 0
+param set-default COM_ARM_EKF_VEL 0
+param set-default COM_ARM_EKF_HGT 0
+param set-default COM_ARM_EKF_YAW 0
+param set-default COM_ARM_IMU_ACC 0
+param set-default COM_ARM_IMU_GYR 0
+param set-default COM_ARM_ESCS 0
+param set-default CBRK_SUPPLY_CHK 894281
+param set-default CBRK_IO_SAFETY 22027
+param set-default COM_ARMABLE 1
+
+# ---------------------------------------------------------------------------
+# MISSION & NAVIGATION (Retain full autonomy)
+# ---------------------------------------------------------------------------
+param set-default MIS_TAKEOFF_ALT 2.0
+param set-default NAV_ACC_RAD 10
+param set-default NPFG_PERIOD 12
+
+# ---------------------------------------------------------------------------
+# HELIGYRO SPECIFIC
+# ---------------------------------------------------------------------------
+param set-default MC_AIRMODE 1           # Keep airmode for safety
+param set-default COM_PREARM_MODE 0      # Disable prearm mode
+
+# ---------------------------------------------------------------------------
+# LOGGING & DEBUG
+# ---------------------------------------------------------------------------
+param set-default SDLOG_MODE 1
+param set-default SDLOG_PROFILE 1
