@@ -39,17 +39,17 @@ param set-default SIM_GZ_EC_FUNC3 103   # Rotor 2 (upper-left-front, CCW, revers
 param set-default SIM_GZ_EC_FUNC4 104   # Rotor 3 (lower-left-front, CW, reversible)
 param set-default SIM_GZ_EC_FUNC5 105   # Rotor 4 (upper-right-front, CW, reversible)
 
-# Motor output limits (matches SDF motor plugin)
+# Motor output limits (reduced to match SDF)
 param set-default SIM_GZ_EC_MIN1 0.0
-param set-default SIM_GZ_EC_MAX1 438.0
-param set-default SIM_GZ_EC_MIN2 -1300.0
-param set-default SIM_GZ_EC_MAX2 1300.0
-param set-default SIM_GZ_EC_MIN3 -1300.0
-param set-default SIM_GZ_EC_MAX3 1300.0
-param set-default SIM_GZ_EC_MIN4 -1300.0
-param set-default SIM_GZ_EC_MAX4 1300.0
-param set-default SIM_GZ_EC_MIN5 -1300.0
-param set-default SIM_GZ_EC_MAX5 1300.0
+param set-default SIM_GZ_EC_MAX1 200.0
+param set-default SIM_GZ_EC_MIN2 -200.0
+param set-default SIM_GZ_EC_MAX2 200.0
+param set-default SIM_GZ_EC_MIN3 -200.0
+param set-default SIM_GZ_EC_MAX3 200.0
+param set-default SIM_GZ_EC_MIN4 -200.0
+param set-default SIM_GZ_EC_MAX4 200.0
+param set-default SIM_GZ_EC_MIN5 -200.0
+param set-default SIM_GZ_EC_MAX5 200.0
 
 # ---------------------------------------------------------------------------
 # ENABLE DYNAMIC CONTROL ALLOCATION
@@ -66,7 +66,7 @@ param set-default CA_ROTOR0_PZ 0.6
 param set-default CA_ROTOR0_AX 0.0
 param set-default CA_ROTOR0_AY 0.0
 param set-default CA_ROTOR0_AZ -1.0
-param set-default CA_ROTOR0_CT 0.0300
+param set-default CA_ROTOR0_CT 0.015
 param set-default CA_ROTOR0_KM 0.07525
 
 # Rotor 1 (lower-right-front, CCW, reversible)
@@ -76,7 +76,7 @@ param set-default CA_ROTOR1_PZ -0.3
 param set-default CA_ROTOR1_AX 1.0
 param set-default CA_ROTOR1_AY 0.0
 param set-default CA_ROTOR1_AZ 0.0
-param set-default CA_ROTOR1_CT 0.0015
+param set-default CA_ROTOR1_CT 0.0008
 param set-default CA_ROTOR1_KM 0.06
 
 # Rotor 2 (upper-left-front, CCW, reversible)
@@ -86,7 +86,7 @@ param set-default CA_ROTOR2_PZ 0.3
 param set-default CA_ROTOR2_AX 1.0
 param set-default CA_ROTOR2_AY 0.0
 param set-default CA_ROTOR2_AZ 0.0
-param set-default CA_ROTOR2_CT 0.0015
+param set-default CA_ROTOR2_CT 0.0008
 param set-default CA_ROTOR2_KM 0.06
 
 # Rotor 3 (lower-left-front, CW, reversible)
@@ -96,7 +96,7 @@ param set-default CA_ROTOR3_PZ -0.3
 param set-default CA_ROTOR3_AX 1.0
 param set-default CA_ROTOR3_AY 0.0
 param set-default CA_ROTOR3_AZ 0.0
-param set-default CA_ROTOR3_CT 0.0015
+param set-default CA_ROTOR3_CT 0.0008
 param set-default CA_ROTOR3_KM -0.06
 
 # Rotor 4 (upper-right-front, CW, reversible)
@@ -106,7 +106,7 @@ param set-default CA_ROTOR4_PZ 0.3
 param set-default CA_ROTOR4_AX 1.0
 param set-default CA_ROTOR4_AY 0.0
 param set-default CA_ROTOR4_AZ 0.0
-param set-default CA_ROTOR4_CT 0.0015
+param set-default CA_ROTOR4_CT 0.0008
 param set-default CA_ROTOR4_KM -0.06
 
 # ---------------------------------------------------------------------------

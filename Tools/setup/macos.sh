@@ -83,7 +83,7 @@ echo "[macos.sh] Installing Python3 dependencies"
 
 # Resolve to git repo root based on script location (handles submodules and subdirectory invocation)
 ROOT_DIR="$(git -C "$DIR" rev-parse --show-toplevel 2>/dev/null || echo "$DIR")"
-VENV_DIR="$ROOT_DIR/.venv"
+VENV_DIR="$ROOT_DIR/venv"
 
 # Create virtual environment if it doesn't exist
 if [ ! -d "$VENV_DIR" ]; then
